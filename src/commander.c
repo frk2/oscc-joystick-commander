@@ -28,15 +28,15 @@
 #define JOYSTICK_AXIS_STEER (SDL_CONTROLLER_AXIS_LEFTX)
 #define JOYSTICK_BUTTON_ENABLE_CONTROLS (SDL_CONTROLLER_BUTTON_START)
 #define JOYSTICK_BUTTON_DISABLE_CONTROLS (SDL_CONTROLLER_BUTTON_BACK)
-#define STEERING_RANGE_PERCENTAGE (0.5)
-#define BRAKES_ENABLED_MIN (0.05)
-#define BRAKE_MULTIPLIER 0.1
-#define ACCEL_MULTIPLIER 0.1
-#define JOYSTICK_DELAY_INTERVAL (10000)
+#define STEERING_RANGE_PERCENTAGE (1.0)
+#define BRAKES_ENABLED_MIN (0.01)
+#define BRAKE_MULTIPLIER 0.4
+#define ACCEL_MULTIPLIER 0.3
+#define JOYSTICK_DELAY_INTERVAL (50000)
 #define COMMANDER_ENABLED ( 1 )
 #define COMMANDER_DISABLED ( 0 )
-#define BRAKE_FILTER_FACTOR (0.1)
-#define THROTTLE_FILTER_FACTOR (0.1)
+#define BRAKE_FILTER_FACTOR (0.2)
+#define THROTTLE_FILTER_FACTOR (0.05)
 #define STEERING_FILTER_FACTOR (0.1)
 
 static int commander_enabled = COMMANDER_DISABLED;
@@ -193,7 +193,7 @@ static int get_normalized_position( unsigned long axis_index, double * const nor
 
     int axis_position = 0;
 
-    static const float deadzone = 0.3;
+    static const float deadzone = 0.01;
 
     return_code = joystick_get_axis( axis_index, &axis_position );
 
@@ -452,7 +452,7 @@ static int command_steering( )
             printf("Steering: %f\n", average);
 
             // use only 20% of allowable range for controllability
-            return_code = oscc_publish_steering_torque( average * 15.0 * 100 );
+            return_code = oscc_publish_steering_torque( average * 15.4);
         }
     }
     else
